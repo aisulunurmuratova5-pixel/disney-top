@@ -1,1 +1,202 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Disney кейіпкерлері – топқа бөлу</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #ffecd2, #fcb69f);
+      color: #2c3e50;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      margin: 20px 0 40px;
+      font-size: 2.8rem;
+      color: #c0392b;
+    }
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 24px;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      border: 1px solid #eee;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+    }
+    .avatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+      border: 3px solid #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .number {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #e74c3c;
+      margin-bottom: 8px;
+    }
+    .result {
+      font-size: 1.6rem;
+      font-weight: bold;
+      margin-top: 10px;
+      min-height: 2rem;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.5s ease;
+    }
+    .result.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .group-1 {
+      background: linear-gradient(90deg, #ff758c, #ff7eb3);
+      color: white;
+      border-radius: 12px;
+      padding: 6px 12px;
+    }
+    .group-2 {
+      background: linear-gradient(90deg, #48c6ef, #6f86d6);
+      color: white;
+      border-radius: 12px;
+      padding: 6px 12px;
+    }
+    .controls {
+      margin: 30px 0;
+      text-align: center;
+    }
+    button {
+      padding: 12px 30px;
+      font-size: 1.2rem;
+      margin: 10px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      background: #e74c3c;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    button:hover {
+      background: #c0392b;
+      transform: translateY(-3px);
+    }
+  </style>
+</head>
+<body>
 
+  <h1>Disney кейіпкерлерін топқа бөлеміз! 🏰✨</h1>
+
+  <div class="controls">
+    <button onclick="resetAll()">Қайта бастау</button>
+  </div>
+
+  <div class="container" id="characters"></div>
+
+  <script>
+    const characters = [
+      { num: "1",  photo: "https://static.wikia.nocookie.net/disney/images/7/7c/Mickey_Mouse_%26_Friends.png/revision/latest?cb=20210403150334" },
+      { num: "2",  photo: "https://lumiere-a.akamaihd.net/v1/images/pp_mickeyandfriends_herobanner_tablet_3118_6cec37bf.jpeg?region=0,0,2048,1098" },
+      { num: "3",  photo: "https://lumiere-a.akamaihd.net/v1/images/hb_disneyprincess_createyourworldcampaignportal_mobile_af67e6fe.jpeg?region=0,0,1024,768&width=960" },
+      { num: "4",  photo: "https://assets.stickpng.com/images/58887c73bc2fc2ef3a186072.png" },
+      { num: "5",  photo: "https://static0.srcdn.com/wordpress/wp-content/uploads/2024/03/monsters-inc-and-toy-story.jpg?w=1600&h=1200&fit=crop" },
+      { num: "6",  photo: "https://m.media-amazon.com/images/I/71pEw11ymOL._AC_UF894,1000_QL80_.jpg" },
+      { num: "7",  photo: "https://i.pinimg.com/736x/47/10/44/471044fabadf214f718322c693eb099f.jpg" },
+      { num: "8",  photo: "https://i.pinimg.com/736x/73/ea/b7/73eab734315a4ed614a4c716285f2d5d.jpg" },
+      { num: "9",  photo: "https://i.ebayimg.com/images/g/YEUAAOSwBMFhslG4/s-l1200.jpg" },
+      { num: "10", photo: "https://i.pinimg.com/736x/2e/cc/c5/2eccc5182cabb66a205f29309201bf9b.jpg" },
+      { num: "11", photo: "https://static.wikia.nocookie.net/disney/images/7/7c/Mickey_Mouse_%26_Friends.png/revision/latest?cb=20210403150334" },
+      { num: "12", photo: "https://static0.cbrimages.com/wordpress/wp-content/uploads/2021/03/Patrick-Star-Show.jpg?w=1600&h=900&fit=crop" },
+      { num: "13", photo: "https://variety.com/wp-content/uploads/2019/03/spongebob.jpg?w=1000&h=563&crop=1" },
+      { num: "14", photo: "https://static0.colliderimages.com/wordpress/wp-content/uploads/2024/12/5623_mario_-_sonic_at_the_olympic_games.jpg?w=1200&h=900&fit=crop" },
+      { num: "15", photo: "https://static0.thegamerimages.com/wordpress/wp-content/uploads/2020/02/Nintendo-Characters.jpg" }
+    ];
+
+    let groupAssignment = null;
+
+    function shuffle(array) {
+      const newArray = [...array];
+      for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+      }
+      return newArray;
+    }
+
+    function prepareGroups() {
+      if (!groupAssignment) {
+        const shuffled = shuffle(characters);
+        groupAssignment = {};
+        
+        // Алғашқы 7 — 1-топ
+        for (let i = 0; i < 7; i++) {
+          groupAssignment[shuffled[i].num] = 1;
+        }
+        // Қалған 8 — 2-топ
+        for (let i = 7; i < shuffled.length; i++) {
+          groupAssignment[shuffled[i].num] = 2;
+        }
+      }
+    }
+
+    function createCards() {
+      prepareGroups();
+
+      const container = document.getElementById("characters");
+      container.innerHTML = "";
+
+      characters.forEach(char => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+          <img class="avatar" src="${char.photo}" alt="Disney кейіпкер ${char.num}">
+          <div class="number">№ ${char.num}</div>
+          <div class="result" id="res-${char.num}">Бассаң топ шығады</div>
+        `;
+
+        card.addEventListener("click", () => {
+          const resultEl = card.querySelector(".result");
+          const group = groupAssignment[char.num];
+          
+          resultEl.textContent = group === 1 ? "1-топ" : "2-топ";
+          resultEl.className = `result show group-${group}`;
+        });
+
+        container.appendChild(card);
+      });
+    }
+
+    function resetAll() {
+      groupAssignment = null;
+      createCards();
+    }
+
+    // Бастапқы жүктелу
+    createCards();
+  </script>
+
+</body>
+</html>
